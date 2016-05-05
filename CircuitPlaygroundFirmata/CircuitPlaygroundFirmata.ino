@@ -102,7 +102,7 @@
                                       //   - Type of click: 0 = no click detection, 1 = single click, 2 = single & double click (default)
                                       //   - Click threshold: 0-255, the higher the value the less sensitive.  Depends on the accelerometer
                                       //     range, good values are: +/-16G = 5-10, +/-8G = 10-20, +/-4G = 20-40, +/-2G = 40-80
-                                      //     80 is the default value (goes well with default of +/-2G) 
+                                      //     80 is the default value (goes well with default of +/-2G)
 #define CP_CAP_READ             0x40  // Read a single capacitive input.  Expects a byte as a parameter with the
                                       // cap touch input to read (0, 1, 2, 3, 6, 9, 10, 12).  Will respond with a
                                       // CP_CAP_REPLY message.
@@ -191,7 +191,7 @@ struct i2c_device_info {
 /* for i2c read continuous more */
 i2c_device_info query[I2C_MAX_QUERIES];
 
-byte i2cRxData[32];
+byte i2cRxData[64];
 boolean isI2CEnabled = false;
 signed char queryIndex = -1;
 // default delay time between i2c read request and Wire.requestFrom()
@@ -643,7 +643,7 @@ void circuitPlaygroundCommand(byte command, byte argc, byte* argv) {
         // Now find the specified cap input and flip on its streaming bit.
         for (int i=0; i<CAP_COUNT; ++i) {
           if (cap_state[i].pin == input) {
-            cap_state[i].streaming = true; 
+            cap_state[i].streaming = true;
           }
         }
       }
@@ -656,7 +656,7 @@ void circuitPlaygroundCommand(byte command, byte argc, byte* argv) {
         // Now find the specified cap input and flip on its streaming bit.
         for (int i=0; i<CAP_COUNT; ++i) {
           if (cap_state[i].pin == input) {
-            cap_state[i].streaming = false; 
+            cap_state[i].streaming = false;
           }
         }
       }
@@ -690,7 +690,7 @@ void circuitPlaygroundCommand(byte command, byte argc, byte* argv) {
 }
 
 // Read the accelerometer and send a response packet.
-void sendAccelResponse() {  
+void sendAccelResponse() {
   // Get an accelerometer X, Y, Z reading.
   sensors_event_t event;
   CircuitPlayground.lis.getEvent(&event);
@@ -740,7 +740,7 @@ void sendCapResponse(uint8_t pin) {
     struct {
       uint8_t type;
       uint8_t pin;
-      int32_t value; 
+      int32_t value;
     } data;
     uint8_t bytes[6];
   } response;
@@ -1071,7 +1071,7 @@ void setup()
     DEBUG_OUTPUT.begin(DEBUG_BAUD);
     DEBUG_PRINTLN("Circuit Playground Firmata starting up!");
   #endif
-  
+
   // Circuit playground setup:
   if (!CircuitPlayground.begin()) {
     // Failed to initialize circuit playground, fast blink the red LED on the board.
@@ -1084,7 +1084,7 @@ void setup()
       delay(100);
     }
   }
-    
+
   Firmata.setFirmwareVersion(FIRMATA_MAJOR_VERSION, FIRMATA_MINOR_VERSION);
 
   Firmata.attach(ANALOG_MESSAGE, analogWriteCallback);
@@ -1111,7 +1111,7 @@ void setup()
   pinConfig[9]  = PIN_MODE_IGNORE;   // Pin 9  = SPI
   pinConfig[28] = PIN_MODE_IGNORE;   // Pin 28 = D8 = LIS3DH CS
   pinConfig[26] = PIN_MODE_IGNORE;   // Messes with CS too?
-  
+
   //while (!Serial) {
   //  ; // wait for serial port to connect. Only needed for ATmega32u4-based boards (Leonardo, etc).
   //}
